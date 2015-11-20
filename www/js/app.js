@@ -22,7 +22,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
+
+    var backText = "后退";
+    $ionicConfigProvider.backButton.previousTitleText(false).text(backText).icon('ion-ios-arrow-back')
+  })
+
+    .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
     .state('app', {
