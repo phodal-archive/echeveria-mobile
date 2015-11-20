@@ -41,16 +41,30 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('PlaylistsCtrl', function($scope, Blog) {
+  $scope.blogs = null;
+  $scope.blogOffset = 0;
+  //
+  $scope.doRefresh = function () {
+    Blog.async('http://deploy.baimizhou.net/api/blog/articles.json').then(function (results) {
+      $scope.blogs = results;
+    });
+    $scope.$broadcast('scroll.refreshComplete');
+    $scope.$apply()
+  };
+
+  Blog.async('http://deploy.baimizhou.net/api/blog/articles.json').then(function (results) {
+    $scope.blogs = results;
+  });
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PlaylistCtrl', function($scope, $stateParams, $sanitize, $sce, Blog) {
+  console.log($stateParams)
+  $scope.blog = {};
+  Blog.async('http://deploy.baimizhou.net/api/' + $stateParams.slug + '.json').then(function (results) {
+    $scope.blog = results;
+    $scope.content = $scope.blog.content;
+    $scope.htmlContent = $sce.trustAsHtml($scope.blog.articleHTML);
+  });
+
 });
