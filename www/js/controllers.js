@@ -41,30 +41,28 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope, Blog) {
-  $scope.blogs = null;
+.controller('ArticleListsCtrl', function($scope, Blog) {
+  $scope.articles = null;
   $scope.blogOffset = 0;
-  //
+
   $scope.doRefresh = function () {
     Blog.async('http://deploy.baimizhou.net/api/blog/articles.json').then(function (results) {
-      $scope.blogs = results;
+      $scope.articles = results;
     });
     $scope.$broadcast('scroll.refreshComplete');
     $scope.$apply()
   };
 
   Blog.async('http://deploy.baimizhou.net/api/blog/articles.json').then(function (results) {
-    $scope.blogs = results;
+    $scope.articles = results;
   });
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams, $sanitize, $sce, Blog) {
-  console.log($stateParams)
-  $scope.blog = {};
+.controller('ArticleCtrl', function($scope, $stateParams, $sanitize, $sce, Blog) {
+  $scope.article = {};
   Blog.async('http://deploy.baimizhou.net/api/' + $stateParams.slug + '.json').then(function (results) {
-    $scope.blog = results;
-    $scope.content = $scope.blog.content;
-    $scope.htmlContent = $sce.trustAsHtml($scope.blog.articleHTML);
+    $scope.article = results;
+    $scope.htmlContent = $sce.trustAsHtml($scope.article.articleHTML);
   });
 
 });
