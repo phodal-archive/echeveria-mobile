@@ -58,6 +58,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('app.setting', {
+    url: '/setting',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/setting.html',
+        controller: 'SettingCtrl'
+      }
+    }
+  })
+
   .state('app.about', {
       url: '/about',
       views: {

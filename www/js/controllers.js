@@ -50,16 +50,16 @@ angular.module('starter.controllers', [])
 
     $scope.create = function () {
       var github = new Github({
-        username: 'fayrobot',
-        password: '',
+        username: $localstorage.get('username'),
+        password: $localstorage.get('password'),
         auth: "basic"
       });
       var options = {
-        author: {name: 'fayrobot', email: 'robot@phodal.com'},
-        committer: {name: 'fayrobot', email: 'robot@phodal.com'},
+        author: {name: $localstorage.get('username'), email: $localstorage.get('email')},
+        committer: {name: $localstorage.get('username'), email: $localstorage.get('email')},
         encode: true
       };
-      var repo = github.getRepo('fayrobot', 'test');
+      var repo = github.getRepo($localstorage.get('username'), $localstorage.get('reponame'));
 
       var postData = {
         title: $scope.posts.title,
@@ -72,9 +72,9 @@ angular.module('starter.controllers', [])
 
       repo.write('master', 'content/' + postData.url + '.json', stringifyData, 'Robot: add article ' + postData.title, options, function (err, data) {
         var createError = err;
-        repo.read('master', 'content/' + postData.url + '.json', function(err, data) {
-          if(err) {
-            alert(createError);
+        repo.read('master', 'content/' + postData.url + '.json', function (err, data) {
+          if (err) {
+            alert(JSON.stringify(createError));
           } else {
             alert("Publish Success");
           }
@@ -83,7 +83,6 @@ angular.module('starter.controllers', [])
     }
   })
 
-
   .controller('ArticleCtrl', function ($scope, $stateParams, $sanitize, $sce, Blog) {
     $scope.article = {};
     Blog.async('http://deploy.baimizhou.net/api/' + $stateParams.slug + '.json').then(function (results) {
@@ -91,4 +90,20 @@ angular.module('starter.controllers', [])
       $scope.htmlContent = $sce.trustAsHtml($scope.article.articleHTML);
     });
 
+  })
+
+  .controller('SettingCtrl', function ($scope, $state, $localstorage) {
+    $scope.data = {};
+    $scope.placeholder = {
+      username: $localstorage.get('username'),
+      reponame: $localstorage.get('reponame'),
+      email: $localstorage.get('email')
+    };
+
+    $scope.setting = function () {
+      $localstorage.set('username', $scope.data.username);
+      $localstorage.set('password', $scope.data.password);
+      $localstorage.set('reponame', $scope.data.reponame);
+      $localstorage.set('email', $scope.data.email);
+    }
   });

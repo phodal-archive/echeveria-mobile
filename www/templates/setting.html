@@ -1,0 +1,23 @@
+<ion-view view-title="设置">
+  <ion-content>
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">用户名</span>
+          <input type="text" placeholder="{{placeholder.username}}" ng-model="data.username">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">密码</span>
+          <input type="text" placeholder="*************" ng-model="data.password">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Repo名</span>
+          <input type="text" placeholder="{{placeholder.reponame}}" ng-model="data.reponame">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">提交邮件</span>
+          <input type="text" placeholder="{{placeholder.email}}" ng-model="data.email">
+        </label>
+      <button type="submit" class="button button-positive button-block" ng-click="setting()">确定</button>
+    </div>
+  </ion-content>
+</ion-view>
