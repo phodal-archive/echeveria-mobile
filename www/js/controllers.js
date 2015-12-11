@@ -39,6 +39,7 @@ angular.module('starter.controllers', [])
       user.notifications(function (err) {
         if (err === null) {
           $scope.noLogin = false;
+          $localstorage.set('username', username);
           //$cordovaToast
           //  .show('Login Success', 'long', 'center')
           //  .then(function (success) {
@@ -97,38 +98,31 @@ angular.module('starter.controllers', [])
     };
 
     $scope.create = function () {
-      var token = $localstorage.get('token');
-      var data = serialData($scope.posts);
+      var github = new Github({
+        username: 'fayrobot',
+        password: '',
+        auth: "basic"
+      });
+      var options = {
+        author: {name: 'fayrobot', email: 'robot@phodal.com'},
+        committer: {name: 'fayrobot', email: 'robot@phodal.com'},
+        encode: true
+      };
+      var repo = github.getRepo('fayrobot', 'test');
 
-      $http({
-        method: 'POST',
-        url: 'https://www.phodal.com/api/app/blog/',
-        data: data,
-        headers: {
-          'Authorization': 'JWT ' + token,
-          'User-Agent': 'phodal/2.0 (iOS 8.1, Android 4.4)'
-        }
-      }).success(function (response) {
-        if ($localstorage.get('draft')) {
-          $localstorage.remove('draft');
-        }
+      var data = {
+        title: $scope.posts.title,
+        content: $scope.posts.content,
+        url: $scope.posts.slug,
+        publish_date: $scope.posts.publish_date,
+        author: $localstorage.get('username') || ""
+      };
+      var stringifyData = JSON.stringify(data);
 
-        $scope.posts = {};
-        $cordovaToast
-          .show('Create Success', 'long', 'center')
-          .then(function (response) {
-            if (data.status === 2) {
-              $state.go('app.blog-detail', {slug: response.slug});
-            }
-          }, function (error) {
-
-          });
-      }).error(function (rep, status) {
-        if (status === 401) {
-          alert(rep.detail);
+      repo.write('master', 'content/' + data.url + '.json', stringifyData, 'Robot: add article ' + data.title, options, function (err, data) {
+        if(data.commit){
+          console.log("=====");
         }
-        alert(JSON.stringify(rep));
-        $localstorage.set('draft', JSON.stringify(data));
       });
     }
   })
