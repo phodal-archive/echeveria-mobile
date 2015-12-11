@@ -47,6 +47,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+
+  .state('app.blog-create', {
+    url: '/blog/create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/create.html',
+        controller: 'CreateBlogCtrl'
+      }
+    }
+  })
+
   .state('app.about', {
       url: '/about',
       views: {
