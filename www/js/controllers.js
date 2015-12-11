@@ -110,19 +110,24 @@ angular.module('starter.controllers', [])
       };
       var repo = github.getRepo('fayrobot', 'test');
 
-      var data = {
+      var postData = {
         title: $scope.posts.title,
         content: $scope.posts.content,
         url: $scope.posts.slug,
         publish_date: $scope.posts.publish_date,
         author: $localstorage.get('username') || ""
       };
-      var stringifyData = JSON.stringify(data);
+      var stringifyData = JSON.stringify(postData);
 
-      repo.write('master', 'content/' + data.url + '.json', stringifyData, 'Robot: add article ' + data.title, options, function (err, data) {
-        if(data.commit){
-          console.log("=====");
-        }
+      repo.write('master', 'content/' + postData.url + '.json', stringifyData, 'Robot: add article ' + postData.title, options, function (err, data) {
+        var createError = err;
+        repo.read('master', 'content/' + postData.url + '.json', function(err, data) {
+          if(err) {
+            alert(createError);
+          } else {
+            alert("Publish Success");
+          }
+        });
       });
     }
   })
