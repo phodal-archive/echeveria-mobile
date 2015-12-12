@@ -43,7 +43,14 @@ angular.module('starter.controllers', [])
     };
 
     $scope.save = function () {
-      var data = serialData($scope.posts);
+      var username = $localstorage.get('username');
+      var data = {
+        title: $scope.posts.title,
+        content: $scope.posts.content,
+        url: $scope.posts.slug,
+        publish_date: $scope.posts.publish_date,
+        author: username || ""
+      };
       $scope.alreadyLoadDraft = true;
       $localstorage.set('draft', JSON.stringify(data));
     };
