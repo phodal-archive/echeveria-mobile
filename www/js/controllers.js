@@ -23,7 +23,7 @@ angular.module('starter.controllers', [])
   })
 
 
-  .controller('SearchCtrl', function ($scope, $stateParams, $sanitize, $sce, Blog) {
+  .controller('SearchCtrl', function ($scope) {
     $scope.query = "";
   })
 
