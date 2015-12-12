@@ -49,24 +49,30 @@ angular.module('starter.controllers', [])
     };
 
     $scope.create = function () {
+      var username = $localstorage.get('username');
+      var password = $localstorage.get('password');
+      var reponame = $localstorage.get('reponame');
+      var email = $localstorage.get('email');
+
       var github = new Github({
-        username: $localstorage.get('username'),
-        password: $localstorage.get('password'),
+        username: username,
+        password: password,
         auth: "basic"
       });
+
       var options = {
-        author: {name: $localstorage.get('username'), email: $localstorage.get('email')},
-        committer: {name: $localstorage.get('username'), email: $localstorage.get('email')},
+        author: {name: username, email: email},
+        committer: {name: username, email: email},
         encode: true
       };
-      var repo = github.getRepo($localstorage.get('username'), $localstorage.get('reponame'));
+      var repo = github.getRepo(username, reponame);
 
       var postData = {
         title: $scope.posts.title,
         content: $scope.posts.content,
         url: $scope.posts.slug,
         publish_date: $scope.posts.publish_date,
-        author: $localstorage.get('username') || ""
+        author: username || ""
       };
       var stringifyData = JSON.stringify(postData);
 
